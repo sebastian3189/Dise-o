@@ -1,0 +1,64 @@
+﻿@model IEnumerable<GYM_ITM.Models.Usuario>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<form asp-controller="Usuarios" asp-action="Index">
+    <p>
+        Buscar: <input type="text" name="buscar" class="form-text">
+        <input type="submit" value="Buscar" class="btn btn-sm btn-dark">
+    </p>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-filtro="@ViewData["FiltroNombre"]">
+                    @Html.DisplayNameFor(model => model.Nombre)
+                </a>
+                
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-filtro="@ViewData["FiltroApellido"]">
+                    @Html.DisplayNameFor(model => model.Apellido)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-filtro="@ViewData["FiltroCorreo"]">
+                    @Html.DisplayNameFor(model => model.Correo)
+                </a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Apellido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Correo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Telefono)
+            </td>
+            <td>
+                    <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.IdUsuario">Edit</a> |
+                    <a asp-action="Details" class="btn btn-primary" asp-route-id="@item.IdUsuario">Details</a> |
+                    <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.IdUsuario">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
