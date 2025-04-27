@@ -5,16 +5,58 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GYM_ITM.Models;
+using GYM_ITM.Models.Observer;
 
 namespace GYM_ITM.Controllers
 {
-    public class HorariosController : Controller
+    public class HorariosController : Controller, INotifier
     {
         private readonly DbgymContext _context;
+        private readonly ISuscriber _suscriber;
+        private List<Usuario> suscriptores;
 
-        public HorariosController(DbgymContext context)
+        public HorariosController(DbgymContext context, ISuscriber suscriber)
         {
             _context = context;
+            _suscriber = suscriber;
+            suscriptores = new List<Usuario>();
+        }
+
+        //public async Task ConfirmarAsistencia() {
+        //    _context.Add
+
+        //}
+
+        public async Task<string> NotificarSuscriptores()
+        {
+            string respuestaSuscriptores = "SUSCRIPTORES NOTIFICADOS\n\n";
+
+            if (suscriptores.Any())
+            {
+                foreach (Usuario suscriptor in suscriptores)
+                {
+                    respuestaSuscriptores += $"{await _suscriber.NotificarUsuario(suscriptor.IdUsuario)}\n";
+                }
+                return respuestaSuscriptores;
+            }
+            else {
+                respuestaSuscriptores += "Ningún usuario confirmo su asistencia a este horario, por lo tanto, ningún usuario fue notificado.";
+                return respuestaSuscriptores;
+            }
+        }
+
+        //Siempre que un usuario confirma asistencia a un horario se añade como suscriptor al horario.
+        //Es decir, se añade a Lista 'suscriptores'.
+        public void AñadirSuscriptor(Usuario suscriptor)
+        {
+            suscriptores.Add(suscriptor);
+        }
+
+        //Siempre que un usuario cancela asistencia a un horario se elimina como suscriptor del horario
+        //Es decir, se elimina de Lista 'suscriptores'.
+        public void ElimminarSuscriptor(Usuario suscriptor)
+        {
+            suscriptores.Remove(suscriptor);
         }
 
         // GET: Horarios
@@ -241,5 +283,6 @@ namespace GYM_ITM.Controllers
         {
             return _context.Horarios.Any(e => e.IdHorario == id);
         }
+
     }
 }

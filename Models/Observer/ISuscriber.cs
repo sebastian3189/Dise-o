@@ -2,6 +2,6 @@
 {
     public interface ISuscriber
     {
-        string NotificarUsuario(int id);
+        Task<string> NotificarUsuario(int id);
     }
 }

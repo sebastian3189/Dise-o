@@ -243,11 +243,35 @@
                                 <a asp-action="Delete" asp-route-id="@item.IdHorario" class="btn btn-sm btn-danger" title="Eliminar">
                                     <i class="fas fa-trash-alt"></i>
                                 </a>
+                            @*     Botón para confirmar asistencia *@
+                                <button type="button" class="btn btn-sm btn-success" title="Confirmar asistencia" data-bs-toggle="modal" data-bs-target="#modalConfirmarAsistencia">
+                                    <i class="fas fa-check"></i> Asistir
+                                </button>
+                                
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
+
+            @* modal modalConfirmarAsistencia *@
+            <div class="modal fade" id="modalConfirmarAsistencia" tabindex="-1" aria-labelledby="modalConfirmarAsistenciaLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalConfirmarAsistenciaLabel">Confirmar asistencia</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Selecciona el usuario para confirmar su asistencia</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success">Confirmar asistencia</button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             @if (!Model.Any())
             {

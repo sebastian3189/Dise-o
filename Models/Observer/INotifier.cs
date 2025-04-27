@@ -2,10 +2,10 @@
 {
     public interface INotifier
     {
-        void NotificarSuscriptores();
+        Task<string> NotificarSuscriptores();
 
-        string AñadirSuscriptor(ISuscriber suscriptor);
+        void AñadirSuscriptor(Usuario suscriptor);
 
-        string ElimminarSuscriptor(ISuscriber suscriptor);
+        void ElimminarSuscriptor(Usuario suscriptor);
     }
 }

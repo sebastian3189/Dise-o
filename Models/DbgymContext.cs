@@ -78,7 +78,7 @@ public partial class DbgymContext : DbContext
             entity.Property(e => e.Nombre).HasMaxLength(100);
             entity.Property(e => e.Telefono).HasMaxLength(20);
 
-            entity.HasMany(d => d.IdHorarios).WithMany(p => p.IdUsuarios)
+            entity.HasMany(d => d.HorariosConfirmados).WithMany(p => p.UsuariosConfirmados)
                 .UsingEntity<Dictionary<string, object>>(
                     "UsuarioHorario",
                     r => r.HasOne<Horario>().WithMany()

@@ -15,5 +15,5 @@ public partial class Usuario
 
     public string? Telefono { get; set; }
 
-    public virtual ICollection<Horario> IdHorarios { get; set; } = new List<Horario>();
+    public virtual ICollection<Horario> HorariosConfirmados { get; set; } = new List<Horario>();
 }
