@@ -1,53 +1,277 @@
 ﻿@model IEnumerable<GYM_ITM.Models.Horario>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Horarios";
 }
 
-<h1>Index</h1>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <style>
+        :root {
+            --color-primario: #268DD7;
+            --color-secundario: #1E7BB8;
+            --color-terciario: #E9F4FB;
+        }
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaInicio)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaFin)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdActividadNavigation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdEspacioNavigation)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaInicio)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaFin)
-            </td>
-            <td>
-                    @Html.DisplayFor(modelItem => item.IdActividadNavigation.NombreActividad)
-            </td>
-            <td>
-                    @Html.DisplayFor(modelItem => item.IdEspacioNavigation.NombreEspacio)
-            </td>
-            <td>
-                    <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.IdHorario">Edit</a> |
-                    <a asp-action="Details" class="btn btn-primary" asp-route-id="@item.IdHorario">Details</a> |
-                    <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.IdHorario">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        body {
+        font-family: 'Montserrat', sans-serif;
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                    url('https://images.unsplash.com/photo-1571902943202-507ec2618e8f?ixlib=rb-4.0.3');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+
+        .header-container {
+            background-color: var(--color-primario);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 4px 12px rgba(38, 141, 215, 0.2);
+        }
+
+        .filter-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: none;
+        }
+
+        .table-container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            padding: 1.5rem;
+            overflow-x: auto;
+        }
+
+        .table {
+            margin-bottom: 0;
+        }
+
+            .table th {
+                background-color: var(--color-terciario);
+                color: var(--color-primario);
+                font-weight: 600;
+                border-top: none;
+            }
+
+        .btn-primary {
+            background-color: var(--color-primario);
+            border-color: var(--color-primario);
+        }
+
+            .btn-primary:hover {
+                background-color: var(--color-secundario);
+                border-color: var(--color-secundario);
+            }
+
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+        .btn-warning {
+            background-color: #6BB9F0;
+            border-color: #6BB9F0;
+            color: #212529;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .form-control, .form-select {
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            border: 1px solid #ced4da;
+        }
+
+            .form-control:focus, .form-select:focus {
+                border-color: var(--color-primario);
+                box-shadow: 0 0 0 0.25rem rgba(38, 141, 215, 0.25);
+            }
+
+        .action-buttons .btn {
+            margin: 0 3px;
+            min-width: 80px;
+            font-size: 0.85rem;
+        }
+
+        .badge-filter {
+            background-color: var(--color-terciario);
+            color: var(--color-primario);
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+
+        .filter-row {
+            margin-bottom: 15px;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="header-container">
+        <div class="container">
+            <h1><i class="far fa-calendar-alt me-2"></i>@ViewData["Title"]</h1>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Card de Filtros -->
+        <div class="filter-card">
+            <h4 class="mb-4"><i class="fas fa-filter me-2"></i>Filtros</h4>
+            <form method="get">
+                <div class="row filter-row">
+                    <div class="col-md-3">
+                        <label for="IdActividad" class="form-label">Actividad</label>
+                        <select class="form-select" id="IdActividad" name="idActividad">
+                            <option value="">Todas las actividades</option>
+                            @foreach (var actividad in ViewData["IdActividad"] as SelectList)
+                            {
+                                <option value="@actividad.Value" selected="@(actividad.Selected ? "selected" : null)">@actividad.Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="IdEspacio" class="form-label">Espacio</label>
+                        <select class="form-select" id="IdEspacio" name="idEspacio">
+                            <option value="">Todos los espacios</option>
+                            @foreach (var espacio in ViewData["IdEspacio"] as SelectList)
+                            {
+                                <option value="@espacio.Value" selected="@(espacio.Selected ? "selected" : null)">@espacio.Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="FechaInicio" class="form-label">Desde</label>
+                        <input type="datetime-local" class="form-control" id="FechaInicio" name="fechaInicio" value="@ViewData["FechaInicio"]" />
+                    </div>
+                    <div class="col-md-3">
+                        <label for="FechaFin" class="form-label">Hasta</label>
+                        <input type="datetime-local" class="form-control" id="FechaFin" name="fechaFin" value="@ViewData["FechaFin"]" />
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search me-2"></i>Filtrar
+                    </button>
+                    <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
+                        <i class="fas fa-sync-alt me-2"></i>Limpiar
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Filtros aplicados -->
+        @{
+            var filtrosAplicados = new List<string>();
+            if (!string.IsNullOrEmpty(Context.Request.Query["idActividad"]))
+            {
+                var actividadId = Context.Request.Query["idActividad"].ToString();
+                var actividadNombre = (ViewData["IdActividad"] as SelectList)?.FirstOrDefault(a => a.Value == actividadId)?.Text;
+                filtrosAplicados.Add($"Actividad: {actividadNombre}");
+            }
+            if (!string.IsNullOrEmpty(Context.Request.Query["idEspacio"]))
+            {
+                var espacioId = Context.Request.Query["idEspacio"].ToString();
+                var espacioNombre = (ViewData["IdEspacio"] as SelectList)?.FirstOrDefault(e => e.Value == espacioId)?.Text;
+                filtrosAplicados.Add($"Espacio: {espacioNombre}");
+            }
+            if (!string.IsNullOrEmpty(Context.Request.Query["fechaInicio"]))
+            {
+                filtrosAplicados.Add($"Desde: {Context.Request.Query["fechaInicio"]}");
+            }
+            if (!string.IsNullOrEmpty(Context.Request.Query["fechaFin"]))
+            {
+                filtrosAplicados.Add($"Hasta: {Context.Request.Query["fechaFin"]}");
+            }
+        }
+
+        @if (filtrosAplicados.Any())
+        {
+            <div class="mb-3">
+                <h6>Filtros aplicados:</h6>
+                @foreach (var filtro in filtrosAplicados)
+                {
+                    <span class="badge badge-filter">@filtro</span>
+                }
+            </div>
+        }
+
+        <!-- Tabla de resultados -->
+        <div class="table-container">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4><i class="fas fa-list me-2"></i>Resultados</h4>
+                <a asp-action="Create" class="btn btn-success">
+                    <i class="fas fa-plus me-2"></i>Nuevo Horario
+                </a>
+            </div>
+
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Fecha Inicio</th>
+                        <th>Fecha Fin</th>
+                        <th>Actividad</th>
+                        <th>Espacio</th>
+                        <th class="text-end">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.FechaInicio?.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>@item.FechaFin?.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>@item.IdActividadNavigation?.NombreActividad</td>
+                            <td>@item.IdEspacioNavigation?.NombreEspacio</td>
+                            <td class="text-end action-buttons">
+                                <a asp-action="Edit" asp-route-id="@item.IdHorario" class="btn btn-sm btn-warning" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a asp-action="Details" asp-route-id="@item.IdHorario" class="btn btn-sm btn-primary" title="Detalles">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.IdHorario" class="btn btn-sm btn-danger" title="Eliminar">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            @if (!Model.Any())
+            {
+                <div class="alert alert-info text-center">
+                    <i class="fas fa-info-circle me-2"></i>No se encontraron horarios con los filtros aplicados
+                </div>
+            }
+        </div>
+    </div>
+
+    @section Scripts {
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Formatear fechas para el input datetime-local
+                const formatDateForInput = (dateString) => {
+                    if (!dateString) return '';
+                    const date = new Date(dateString);
+                    return date.toISOString().slice(0, 16);
+                };
+
+                document.getElementById('FechaInicio').value = formatDateForInput('@ViewData["FechaInicio"]');
+                document.getElementById('FechaFin').value = formatDateForInput('@ViewData["FechaFin"]');
+            });
+        </script>
+    }
+</body>
+</html>
