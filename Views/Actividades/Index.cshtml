@@ -1,51 +1,197 @@
 ﻿@model IEnumerable<GYM_ITM.Models.Actividades>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Actividades";
 }
 
-<h1>Index</h1>
+<!-- Fuente Montserrat -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<style>
+    /* Estilos consistentes */
+    body {
+        font-family: 'Montserrat', sans-serif;
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1571902943202-507ec2618e8f?ixlib=rb-4.0.3');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
 
-<form asp-controller="Actividades" asp-action="Index">
-    <p>
-        Buscar: <input type="text" name="buscar" class="form-text">
-        <input type="submit" value="Buscar" class="btn btn-sm btn-dark">
-    </p>
-</form>
+    .header-container {
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border-top: 4px solid #268DD7;
+    }
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                <a asp-action="Index" asp-route-filtro="@ViewData["FiltroNombreActividad"]">
-                    @Html.DisplayNameFor(model => model.NombreActividad)
-                </a>
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DescripcionActividad)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.NombreActividad)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DescripcionActividad)
-            </td>
-            <td>
-                    <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.IdActividad">Edit</a> |
-                    <a asp-action="Details" class="btn btn-primary" asp-route-id="@item.IdActividad">Details</a> |
-                    <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.IdActividad">Delete</a>
-            </td>
-        </tr>
+    .table-container {
+        background-color: rgba(255, 255, 255, 0.98);
+        border-radius: 10px;
+        padding: 25px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .table-title {
+        color: #268DD7;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .btn-create {
+        background-color: #268DD7;
+        color: white;
+        font-weight: 600;
+        padding: 8px 20px;
+        border: none;
+        border-radius: 5px;
+        transition: all 0.3s;
+    }
+
+        .btn-create:hover {
+            background-color: #1E7BC4;
+            transform: translateY(-2px);
+        }
+
+    .table {
+        margin-top: 20px;
+    }
+
+        .table thead th {
+            background-color: #268DD7;
+            color: white;
+            font-weight: 600;
+            border: none;
+        }
+
+        .table tbody tr {
+            transition: all 0.2s;
+        }
+
+            .table tbody tr:hover {
+                background-color: rgba(38, 141, 215, 0.05);
+            }
+
+    .action-btn {
+        padding: 5px 12px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        margin: 2px;
+        min-width: 80px;
+        transition: all 0.2s;
+    }
+
+    .btn-edit {
+        background-color: #6BB9F0;
+        color: #212529;
+    }
+
+    .btn-details {
+        background-color: #268DD7;
+        color: white;
+    }
+
+    .btn-delete {
+        background-color: #e74c3c;
+        color: white;
+    }
+
+    .search-box {
+        max-width: 300px;
+        display: inline-block;
+    }
+
+    .btn-search {
+        background-color: #2c3e50;
+        color: white;
+    }
+
+    .sortable-header {
+        color: white !important;
+        text-decoration: none;
+    }
+
+        .sortable-header:hover {
+            color: #f8f9fa !important;
+        }
+</style>
+
+<div class="header-container">
+    <h2 class="table-title">GIMNASIO ITM</h2>
+    <h3 class="text-center mb-4 fw-bold" style="color: #268DD7;">LISTA DE ACTIVIDADES</h3>
+
+    <div class="d-flex justify-content-between align-items-center">
+        <a asp-action="Create" class="btn btn-create">
+            <i class="fas fa-plus"></i> Nueva Actividad
+        </a>
+
+        <form asp-controller="Actividades" asp-action="Index" class="form-inline">
+            <div class="input-group">
+                <input type="text" name="buscar" class="form-control search-box" placeholder="Buscar...">
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-search">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="table-container">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>
+                    <a class="sortable-header" asp-action="Index" asp-route-filtro="@ViewData["FiltroNombreActividad"]">
+                        Nombre Actividad <i class="fas fa-sort"></i>
+                    </a>
+                </th>
+                <th>Descripción</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.NombreActividad)</td>
+                    <td>@Html.DisplayFor(modelItem => item.DescripcionActividad)</td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            <a asp-action="Edit" asp-route-id="@item.IdActividad" class="btn btn-edit action-btn">
+                                <i class="fas fa-edit"></i> Editar
+                            </a>
+                            <a asp-action="Details" asp-route-id="@item.IdActividad" class="btn btn-details action-btn">
+                                <i class="fas fa-info-circle"></i> Detalles
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.IdActividad" class="btn btn-delete action-btn">
+                                <i class="fas fa-trash-alt"></i> Eliminar
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- CDN para íconos -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+@section Scripts {
+    <script>
+        // Efecto hover mejorado para filas
+        $(document).ready(function() {
+            $('.table tbody tr').hover(
+                function() {
+                    $(this).css('transform', 'translateX(5px)');
+                },
+                function() {
+                    $(this).css('transform', 'translateX(0)');
+                }
+            );
+        });
+    </script>
 }
-    </tbody>
-</table>

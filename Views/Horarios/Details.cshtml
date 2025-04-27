@@ -1,42 +1,126 @@
 ﻿@model GYM_ITM.Models.Horario
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalles del Horario";
 }
 
-<h1>Details</h1>
+<!-- Fuente Montserrat -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<div>
-    <h4>Horario</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FechaInicio)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaInicio)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FechaFin)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaFin)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IdActividadNavigation)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IdActividadNavigation.IdActividad)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IdEspacioNavigation)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IdEspacioNavigation.IdEspacio)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.IdHorario">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<style>
+    /* Estilos consistentes */
+    body {
+        font-family: 'Montserrat', sans-serif;
+        background: linear-gradient(rgba(38, 141, 215, 0.1), rgba(38, 141, 215, 0.1)), url('https://images.unsplash.com/photo-1571902943202-507ec2618e8f?ixlib=rb-4.0.3');
+        background-size: cover;
+        background-position: center;
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+    }
+
+    .details-container {
+        background-color: rgba(255, 255, 255, 0.98);
+        border-radius: 10px;
+        padding: 30px;
+        margin: 50px auto;
+        box-shadow: 0 5px 20px rgba(38, 141, 215, 0.2);
+        max-width: 600px;
+        border-top: 4px solid #268DD7;
+    }
+
+    .details-title {
+        color: #268DD7;
+        text-align: center;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .detail-label {
+        color: #268DD7;
+        font-weight: 600;
+    }
+
+    .detail-value {
+        padding: 8px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .action-links {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 25px;
+    }
+
+    .action-link {
+        color: #268DD7;
+        text-decoration: none;
+        font-weight: 500;
+        padding: 8px 20px;
+        border: 1px solid #268DD7;
+        border-radius: 5px;
+        transition: all 0.3s;
+    }
+
+        .action-link:hover {
+            background-color: rgba(38, 141, 215, 0.1);
+            text-decoration: none;
+        }
+
+    .action-link-primary {
+        background-color: #268DD7;
+        color: white;
+    }
+
+        .action-link-primary:hover {
+            background-color: #1E7BC4;
+            color: white;
+        }
+</style>
+
+<div class="details-container">
+    <h2 class="details-title">GIMNASIO ITM</h2>
+    <h3 class="text-center mb-4" style="color: #268DD7;">DETALLES DEL HORARIO</h3>
+
+    <div class="details-content">
+        <div class="row">
+            <div class="col-md-12">
+                <dl class="row">
+                    <dt class="col-sm-4 detail-label">
+                        Fecha de Inicio
+                    </dt>
+                    <dd class="col-sm-8 detail-value">
+                        @Html.DisplayFor(model => model.FechaInicio)
+                    </dd>
+
+                    <dt class="col-sm-4 detail-label">
+                        Fecha de Fin
+                    </dt>
+                    <dd class="col-sm-8 detail-value">
+                        @Html.DisplayFor(model => model.FechaFin)
+                    </dd>
+
+                    <dt class="col-sm-4 detail-label">
+                        Actividad
+                    </dt>
+                    <dd class="col-sm-8 detail-value">
+                        @Html.DisplayFor(model => model.IdActividadNavigation.NombreActividad)
+                    </dd>
+
+                    <dt class="col-sm-4 detail-label">
+                        Espacio
+                    </dt>
+                    <dd class="col-sm-8 detail-value">
+                        @Html.DisplayFor(model => model.IdEspacioNavigation.NombreEspacio)
+                    </dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="action-links">
+            <a asp-action="Edit" asp-route-id="@Model?.IdHorario" class="action-link action-link-primary">Editar</a>
+            <a asp-action="Index" class="action-link">Volver al Listado</a>
+        </div>
+    </div>
 </div>

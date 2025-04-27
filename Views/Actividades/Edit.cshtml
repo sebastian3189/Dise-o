@@ -1,39 +1,239 @@
 ﻿@model GYM_ITM.Models.Actividades
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Actividad";
 }
 
-<h1>Edit</h1>
+<!-- Agrega Montserrat desde Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- Agrega Font Awesome para íconos -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<h4>Actividade</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+<style>
+    /* Estilos generales */
+    body {
+        font-family: 'Montserrat', sans-serif;
+        background: linear-gradient(rgba(38, 141, 215, 0.1), rgba(38, 141, 215, 0.1)), url('https://images.unsplash.com/photo-1571902943202-507ec2618e8f?ixlib=rb-4.0.3');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+    }
+
+    .navbar {
+        background-color: rgba(38, 141, 215, 0.9);
+        padding: 15px 30px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        backdrop-filter: blur(5px);
+    }
+
+    .navbar-brand {
+        color: white !important;
+        font-weight: 700;
+        font-size: 1.5rem;
+    }
+
+    .nav-link {
+        color: rgba(255,255,255,0.8) !important;
+        margin: 0 10px;
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+
+        .nav-link:hover {
+            color: white !important;
+            transform: translateY(-2px);
+        }
+
+    .edit-container {
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        max-width: 600px;
+        margin: 40px auto;
+        border-top: 5px solid #268DD7;
+        backdrop-filter: blur(2px);
+    }
+
+    .edit-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .edit-title {
+        color: #268DD7;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        padding: 12px 15px;
+        border: 1px solid #ced4da;
+        transition: all 0.3s;
+        width: 100%;
+        background-color: rgba(255,255,255,0.8);
+    }
+
+        .form-control:focus {
+            border-color: #268DD7;
+            box-shadow: 0 0 0 0.25rem rgba(38, 141, 215, 0.25);
+            background-color: white;
+        }
+
+    .text-danger {
+        color: #dc3545;
+        font-size: 0.85rem;
+        margin-top: 5px;
+        display: block;
+    }
+
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 30px;
+    }
+
+    .btn {
+        font-weight: 600;
+        padding: 10px 25px;
+        border-radius: 30px;
+        transition: all 0.3s;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-save {
+        background-color: #268DD7;
+        color: white;
+    }
+
+        .btn-save:hover {
+            background-color: #1E7BC4;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(38, 141, 215, 0.3);
+        }
+
+    .btn-back {
+        background-color: transparent;
+        color: #268DD7;
+        border: 2px solid #268DD7;
+    }
+
+        .btn-back:hover {
+            background-color: rgba(38, 141, 215, 0.1);
+            transform: translateY(-2px);
+        }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .edit-container {
+            padding: 20px;
+            margin: 20px;
+            backdrop-filter: none;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn {
+            width: 100%;
+        }
+
+        body {
+            background-attachment: scroll;
+        }
+    }
+</style>
+
+<!-- Barra de navegación -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">GYM_ITM</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Privacy</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Usuarios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Espacios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" asp-controller="Actividades" asp-action="Index">Actividades</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Horarios</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Contenido principal -->
+<div class="container">
+    <div class="edit-container">
+        <div class="edit-header">
+            <h1 class="edit-title">GIMNASIO ITM</h1>
+            <h2>EDITAR ACTIVIDAD</h2>
+        </div>
+
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdActividad" />
+
             <div class="form-group">
-                <label asp-for="NombreActividad" class="control-label"></label>
-                <input asp-for="NombreActividad" class="form-control" />
+                <label asp-for="NombreActividad" class="form-label">
+                    <i class="fas fa-dumbbell me-2"></i>Nombre de la Actividad
+                </label>
+                <input asp-for="NombreActividad" class="form-control" placeholder="Ej: Spinning, Yoga, Crossfit" />
                 <span asp-validation-for="NombreActividad" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="DescripcionActividad" class="control-label"></label>
-                <input asp-for="DescripcionActividad" class="form-control" />
+                <label asp-for="DescripcionActividad" class="form-label">
+                    <i class="fas fa-align-left me-2"></i>Descripción
+                </label>
+                <input asp-for="DescripcionActividad" class="form-control" placeholder="Descripción breve de la actividad" />
                 <span asp-validation-for="DescripcionActividad" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+
+            <div class="action-buttons">
+                <button type="submit" class="btn btn-save">
+                    <i class="fas fa-save me-2"></i>Guardar Cambios
+                </button>
+                <a asp-action="Index" class="btn btn-back">
+                    <i class="fas fa-arrow-left me-2"></i>Cancelar
+                </a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
