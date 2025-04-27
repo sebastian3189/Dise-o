@@ -24,7 +24,7 @@ namespace GYM_ITM.Controllers
         //Ejecución en NotificarSuscriptores() de la interfaz INotifier Observer en HorariosController
         public string NotificarUsuario(int id)
         {
-            Usuario usuario = _context.Usuarios.Find(id);
+            Usuario? usuario = _context.Usuarios.Find(id);
             if (usuario != null)
             {
                 return $"Hola, soy {usuario.Nombre} {usuario.Apellido}, ya me enteré del cambio de horario o lugar. Gracias.";
