@@ -1,38 +1,115 @@
 ﻿@model GYM_ITM.Models.Espacio
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Crear Espacio";
 }
 
-<h1>Create</h1>
+<!-- Fuente Montserrat -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<h4>Espacio</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="NombreEspacio" class="control-label"></label>
-                <input asp-for="NombreEspacio" class="form-control" />
-                <span asp-validation-for="NombreEspacio" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LimiteDisponibilidad" class="control-label"></label>
-                <input asp-for="LimiteDisponibilidad" class="form-control" />
-                <span asp-validation-for="LimiteDisponibilidad" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+<style>
+    /* Estilos consistentes con la vista de registro */
+    body {
+        font-family: 'Montserrat', sans-serif;
+        background: linear-gradient(rgba(38, 141, 215, 0.1), rgba(38, 141, 215, 0.1)), url('https://images.unsplash.com/photo-1571902943202-507ec2618e8f?ixlib=rb-4.0.3');
+        background-size: cover;
+        background-position: center;
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+    }
 
-<div>
-    <a asp-action="Index">Back to List</a>
+    .form-container {
+        background-color: rgba(255, 255, 255, 0.98);
+        border-radius: 10px;
+        padding: 30px;
+        margin: 50px auto;
+        box-shadow: 0 5px 20px rgba(38, 141, 215, 0.2);
+        max-width: 600px;
+        border-top: 4px solid #268DD7;
+    }
+
+    .form-title {
+        color: #268DD7;
+        margin-bottom: 20px;
+        text-align: center;
+        font-weight: 700;
+    }
+
+    h3 {
+        color: #268DD7;
+        text-align: center;
+        font-weight: 600;
+        margin-bottom: 25px;
+    }
+
+    .btn {
+        font-weight: 500;
+    }
+
+    .btn-primary {
+        background-color: #268DD7;
+        border-color: #268DD7;
+        padding: 8px 25px;
+    }
+
+        .btn-primary:hover {
+            background-color: #1E7BC4;
+            border-color: #1E7BC4;
+        }
+
+    .btn-secondary {
+        color: #268DD7;
+        border-color: #268DD7;
+        background-color: transparent;
+    }
+
+        .btn-secondary:hover {
+            background-color: rgba(38, 141, 215, 0.1);
+        }
+
+    .form-control {
+        font-family: 'Montserrat', sans-serif;
+    }
+
+        .form-control:focus {
+            border-color: #268DD7;
+            box-shadow: 0 0 0 0.25rem rgba(38, 141, 215, 0.25);
+        }
+
+    .control-label {
+        font-weight: 500;
+    }
+</style>
+
+<div class="form-container">
+    <h2 class="form-title">GIMNASIO ITM</h2>
+    <h3>CREAR NUEVO ESPACIO</h3>
+
+    <form asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-group mb-3">
+            <label asp-for="NombreEspacio" class="control-label">Nombre del Espacio</label>
+            <input asp-for="NombreEspacio" class="form-control" placeholder="Ej: Sala de Pesas" />
+            <span asp-validation-for="NombreEspacio" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-4">
+            <label asp-for="LimiteDisponibilidad" class="control-label">Límite de Disponibilidad</label>
+            <input asp-for="LimiteDisponibilidad" class="form-control" placeholder="Ej: 20 personas" />
+            <span asp-validation-for="LimiteDisponibilidad" class="text-danger"></span>
+        </div>
+
+        <div class="form-group d-flex justify-content-center gap-3">
+            <button type="submit" class="btn btn-primary">Crear Espacio</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
