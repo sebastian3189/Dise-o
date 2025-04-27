@@ -7,16 +7,31 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GYM_ITM.Models;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using GYM_ITM.Models.Observer;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace GYM_ITM.Controllers
 {
-    public class UsuariosController : Controller
+    public class UsuariosController : Controller, ISuscriber
     {
         private readonly DbgymContext _context;
 
         public UsuariosController(DbgymContext context)
         {
             _context = context;
+        }
+
+        //Ejecución en NotificarSuscriptores() de la interfaz INotifier Observer en HorariosController
+        public string NotificarUsuario(int id)
+        {
+            Usuario usuario = _context.Usuarios.Find(id);
+            if (usuario != null)
+            {
+                return $"Hola, soy {usuario.Nombre} {usuario.Apellido}, ya me enteré del cambio de horario o lugar. Gracias.";
+            } else
+            {
+                return $"La persona con ID {id} no está registrado en nuestra base de datos, por ese motivo no tenemos datos para efectuar su notificación. Debe registrarse para recibir próximas notificaciones.";
+            }
         }
 
         // GET: Usuarios
@@ -196,5 +211,6 @@ namespace GYM_ITM.Controllers
         {
             return _context.Usuarios.Any(e => e.IdUsuario == id);
         }
+
     }
 }
