@@ -1,49 +1,104 @@
 ﻿@model GYM_ITM.Models.Usuario
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Usuario";
 }
 
-<h1>Edit</h1>
+<!-- Fuente Montserrat (si no está en _Layout.cshtml) -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<h4>Usuario</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="IdUsuario" />
-            <div class="form-group">
-                <label asp-for="Nombre" class="control-label"></label>
-                <input asp-for="Nombre" class="form-control" />
-                <span asp-validation-for="Nombre" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Apellido" class="control-label"></label>
-                <input asp-for="Apellido" class="form-control" />
-                <span asp-validation-for="Apellido" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Correo" class="control-label"></label>
-                <input asp-for="Correo" class="form-control" />
-                <span asp-validation-for="Correo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Telefono" class="control-label"></label>
-                <input asp-for="Telefono" class="form-control" />
-                <span asp-validation-for="Telefono" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+<style>
+    /* Estilos consistentes con la vista de registro */
+    body {
+        font-family: 'Montserrat', sans-serif;
+        background: linear-gradient(rgba(38, 141, 215, 0.1), rgba(38, 141, 215, 0.1)),
+                    url('https://images.unsplash.com/photo-1571902943202-507ec2618e8f?ixlib=rb-4.0.3');
+        background-size: cover;
+        background-position: center;
+        min-height: 100vh;
+    }
 
-<div>
-    <a asp-action="Index">Back to List</a>
+    .form-container {
+        background-color: rgba(255, 255, 255, 0.98);
+        border-radius: 10px;
+        padding: 30px;
+        margin: 50px auto;
+        box-shadow: 0 5px 20px rgba(38, 141, 215, 0.2);
+        max-width: 600px;
+        border-top: 4px solid #268DD7;
+    }
+
+    .form-title {
+        color: #268DD7;
+        text-align: center;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .btn-primary {
+        background-color: #268DD7;
+        border-color: #268DD7;
+        padding: 8px 25px;
+    }
+
+    .btn-primary:hover {
+        background-color: #1E7BC4;
+        border-color: #1E7BC4;
+    }
+
+    .btn-secondary {
+        color: #268DD7;
+        border-color: #268DD7;
+        background-color: transparent;
+    }
+
+    .form-control:focus {
+        border-color: #268DD7;
+        box-shadow: 0 0 0 0.25rem rgba(38, 141, 215, 0.25);
+    }
+</style>
+
+<div class="form-container">
+    <h2 class="form-title">GIMNASIO ITM</h2>
+    <h3 class="text-center mb-4" style="color: #268DD7;">EDITAR USUARIO</h3>
+
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="IdUsuario" />
+
+        <div class="form-group mb-3">
+            <label asp-for="Nombre" class="control-label">Nombre</label>
+            <input asp-for="Nombre" class="form-control" placeholder="Ej: Juan" />
+            <span asp-validation-for="Nombre" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="Apellido" class="control-label">Apellido</label>
+            <input asp-for="Apellido" class="form-control" placeholder="Ej: Pérez" />
+            <span asp-validation-for="Apellido" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="Correo" class="control-label">Correo Electrónico</label>
+            <input asp-for="Correo" class="form-control" placeholder="ejemplo@itm.com" />
+            <span asp-validation-for="Correo" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-4">
+            <label asp-for="Telefono" class="control-label">Teléfono</label>
+            <input asp-for="Telefono" class="form-control" placeholder="Ingrese solo números" />
+            <span asp-validation-for="Telefono" class="text-danger"></span>
+        </div>
+
+        <div class="form-group d-flex justify-content-center gap-3">
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            <a asp-action="Index" class="btn btn-secondary">Volver al Listado</a>
+        </div>
+    </form>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

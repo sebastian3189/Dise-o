@@ -1,49 +1,231 @@
 ﻿@model GYM_ITM.Models.Horario
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Horario";
 }
 
-<h1>Edit</h1>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        :root {
+            --color-primario: #268DD7;
+            --color-secundario: #1E7BB8;
+        }
 
-<h4>Horario</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="IdHorario" />
-            <div class="form-group">
-                <label asp-for="FechaInicio" class="control-label"></label>
-                <input asp-for="FechaInicio" class="form-control" />
-                <span asp-validation-for="FechaInicio" class="text-danger"></span>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(rgba(38, 141, 215, 0.1), rgba(38, 141, 215, 0.1)), url('https://images.unsplash.com/photo-1571902943202-507ec2618e8f?ixlib=rb-4.0.3');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .edit-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .edit-card {
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(38, 141, 215, 0.2);
+            border: none;
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.95);
+            overflow: hidden;
+        }
+
+        .card-header {
+            background-color: var(--color-primario);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            border-bottom: none;
+        }
+
+        .card-title {
+            font-weight: 600;
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--color-primario);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control, .form-select {
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            border: 1px solid #ced4da;
+            transition: all 0.3s;
+        }
+
+            .form-control:focus, .form-select:focus {
+                border-color: var(--color-primario);
+                box-shadow: 0 0 0 0.25rem rgba(38, 141, 215, 0.25);
+            }
+
+        .btn-primary {
+            background-color: var(--color-primario);
+            border-color: var(--color-primario);
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+            .btn-primary:hover {
+                background-color: var(--color-secundario);
+                border-color: var(--color-secundario);
+                transform: translateY(-2px);
+            }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+        }
+
+        .alert-danger {
+            background-color: rgba(220, 53, 69, 0.9);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        @@keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .edit-container {
+                margin: 1rem;
+            }
+
+            .card-body {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="edit-container">
+        <div class="edit-card">
+            <div class="card-header">
+                <h2 class="card-title"><i class="fas fa-calendar-alt me-2"></i>@ViewData["Title"]</h2>
             </div>
-            <div class="form-group">
-                <label asp-for="FechaFin" class="control-label"></label>
-                <input asp-for="FechaFin" class="form-control" />
-                <span asp-validation-for="FechaFin" class="text-danger"></span>
+            <div class="card-body">
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-circle me-2"></i>@TempData["ErrorMessage"]
+                    </div>
+                }
+
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="IdHorario" />
+
+                    <!-- Fecha de Inicio -->
+                    <div class="mb-4">
+                        <label asp-for="FechaInicio" class="form-label"><i class="far fa-clock me-2"></i>Fecha y Hora de Inicio</label>
+                        <input asp-for="FechaInicio" class="form-control" type="datetime-local" />
+                        <span asp-validation-for="FechaInicio" class="text-danger"></span>
+                    </div>
+
+                    <!-- Fecha de Fin -->
+                    <div class="mb-4">
+                        <label asp-for="FechaFin" class="form-label"><i class="far fa-clock me-2"></i>Fecha y Hora de Fin</label>
+                        <input asp-for="FechaFin" class="form-control" type="datetime-local" />
+                        <span asp-validation-for="FechaFin" class="text-danger"></span>
+                    </div>
+
+                    <!-- Dropdown Actividad -->
+                    <div class="mb-4">
+                        <label asp-for="IdActividad" class="form-label"><i class="fas fa-dumbbell me-2"></i>Actividad</label>
+                        <select asp-for="IdActividad" class="form-select" asp-items="ViewBag.IdActividad">
+                            <option value="">-- Seleccione una actividad --</option>
+                        </select>
+                        <span asp-validation-for="IdActividad" class="text-danger"></span>
+                    </div>
+
+                    <!-- Dropdown Espacio -->
+                    <div class="mb-4">
+                        <label asp-for="IdEspacio" class="form-label"><i class="fas fa-location-dot me-2"></i>Espacio</label>
+                        <select asp-for="IdEspacio" class="form-select" asp-items="ViewBag.IdEspacio">
+                            <option value="">-- Seleccione un espacio --</option>
+                        </select>
+                        <span asp-validation-for="IdEspacio" class="text-danger"></span>
+                    </div>
+
+                    <!-- Botones -->
+                    <div class="btn-container">
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Volver al Listado
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>Guardar Cambios
+                        </button>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="IdActividad" class="control-label"></label>
-                <select asp-for="IdActividad" class="form-control" asp-items="ViewBag.IdActividad"></select>
-                <span asp-validation-for="IdActividad" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdEspacio" class="control-label"></label>
-                <select asp-for="IdEspacio" class="form-control" asp-items="ViewBag.IdEspacio"></select>
-                <span asp-validation-for="IdEspacio" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+        <!-- Script para mejorar la experiencia de selección de fechas -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Formato inicial de fechas si son null
+                const fechaInicio = document.getElementById('FechaInicio');
+                const fechaFin = document.getElementById('FechaFin');
+
+                if (!fechaInicio.value) {
+                    const now = new Date();
+                    fechaInicio.value = now.toISOString().slice(0, 16);
+                }
+
+                if (!fechaFin.value) {
+                    const now = new Date();
+                    now.setHours(now.getHours() + 1);
+                    fechaFin.value = now.toISOString().slice(0, 16);
+                }
+            });
+        </script>
+    }
+</body>
+</html>
