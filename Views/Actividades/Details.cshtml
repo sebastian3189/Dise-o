@@ -1,7 +1,7 @@
 ﻿@model GYM_ITM.Models.Actividades
 
 @{
-    ViewData["Title"] = "Detalles de Actividad";
+    ViewData["Title"] = "Editar Actividad";
 }
 
 <!-- Agrega Montserrat desde Google Fonts -->
@@ -13,15 +13,20 @@
     /* Estilos generales */
     body {
         font-family: 'Montserrat', sans-serif;
-        background-color: #f8f9fa;
+        background: linear-gradient(rgba(38, 141, 215, 0.1), rgba(38, 141, 215, 0.1)), url('https://images.unsplash.com/photo-1571902943202-507ec2618e8f?ixlib=rb-4.0.3');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        min-height: 100vh;
         margin: 0;
         padding: 0;
     }
 
     .navbar {
-        background-color: #268DD7;
+        background-color: rgba(38, 141, 215, 0.9);
         padding: 15px 30px;
         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        backdrop-filter: blur(5px);
     }
 
     .navbar-brand {
@@ -42,58 +47,59 @@
             transform: translateY(-2px);
         }
 
-    .details-container {
-        background-color: white;
+    .edit-container {
+        background-color: rgba(255, 255, 255, 0.95);
         border-radius: 10px;
         padding: 30px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        max-width: 800px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        max-width: 600px;
         margin: 40px auto;
         border-top: 5px solid #268DD7;
+        backdrop-filter: blur(2px);
     }
 
-    .details-header {
+    .edit-header {
         text-align: center;
         margin-bottom: 30px;
     }
 
-    .details-title {
+    .edit-title {
         color: #268DD7;
         font-weight: 700;
         margin-bottom: 10px;
     }
 
-    .details-card {
-        background-color: #f8f9fa;
-        border-radius: 8px;
-        padding: 25px;
-        margin-bottom: 30px;
-    }
-
-    .detail-row {
-        display: flex;
+    .form-group {
         margin-bottom: 20px;
-        padding-bottom: 20px;
-        border-bottom: 1px solid #e9ecef;
     }
 
-        .detail-row:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
+    .form-label {
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        padding: 12px 15px;
+        border: 1px solid #ced4da;
+        transition: all 0.3s;
+        width: 100%;
+        background-color: rgba(255,255,255,0.8);
+    }
+
+        .form-control:focus {
+            border-color: #268DD7;
+            box-shadow: 0 0 0 0.25rem rgba(38, 141, 215, 0.25);
+            background-color: white;
         }
 
-    .detail-label {
-        font-weight: 600;
-        color: #268DD7;
-        width: 200px;
-        font-size: 1rem;
-    }
-
-    .detail-value {
-        flex: 1;
-        color: #495057;
-        font-weight: 500;
+    .text-danger {
+        color: #dc3545;
+        font-size: 0.85rem;
+        margin-top: 5px;
+        display: block;
     }
 
     .action-buttons {
@@ -108,22 +114,23 @@
         padding: 10px 25px;
         border-radius: 30px;
         transition: all 0.3s;
+        border: none;
+        cursor: pointer;
     }
 
-    .btn-edit {
+    .btn-save {
         background-color: #268DD7;
         color: white;
-        border: none;
     }
 
-        .btn-edit:hover {
+        .btn-save:hover {
             background-color: #1E7BC4;
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(38, 141, 215, 0.3);
         }
 
     .btn-back {
-        background-color: white;
+        background-color: transparent;
         color: #268DD7;
         border: 2px solid #268DD7;
     }
@@ -135,13 +142,10 @@
 
     /* Responsive */
     @@media (max-width: 768px) {
-        .detail-row {
-            flex-direction: column;
-        }
-
-        .detail-label {
-            width: 100%;
-            margin-bottom: 8px;
+        .edit-container {
+            padding: 20px;
+            margin: 20px;
+            backdrop-filter: none;
         }
 
         .action-buttons {
@@ -152,71 +156,55 @@
         .btn {
             width: 100%;
         }
+
+        body {
+            background-attachment: scroll;
+        }
     }
 </style>
 
-<!-- Barra de navegación -->
-<nav class="navbar navbar-expand-lg navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">GYM_ITM</a>
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Privacy</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Usuarios</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Espacios</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" asp-controller="Actividades" asp-action="Index">Actividades</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Horarios</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
 <!-- Contenido principal -->
 <div class="container">
-    <div class="details-container">
-        <div class="details-header">
-            <h1 class="details-title">GIMNASIO ITM</h1>
-            <h2>DETALLES DE ACTIVIDAD</h2>
+    <div class="edit-container">
+        <div class="edit-header">
+            <h1 class="edit-title">GIMNASIO ITM</h1>
+            <h2>EDITAR ACTIVIDAD</h2>
         </div>
 
-        <div class="details-card">
-            <div class="detail-row">
-                <div class="detail-label">
-                    <i class="fas fa-dumbbell me-2"></i>
-                    Nombre de Actividad:
-                </div>
-                <div class="detail-value">@Model.NombreActividad</div>
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdActividad" />
+
+            <div class="form-group">
+                <label asp-for="NombreActividad" class="form-label">
+                    <i class="fas fa-dumbbell me-2"></i>Nombre de la Actividad
+                </label>
+                <input asp-for="NombreActividad" class="form-control" placeholder="Ej: Spinning, Yoga, Crossfit" />
+                <span asp-validation-for="NombreActividad" class="text-danger"></span>
             </div>
 
-            <div class="detail-row">
-                <div class="detail-label">
-                    <i class="fas fa-align-left me-2"></i>
-                    Descripción:
-                </div>
-                <div class="detail-value">@Model.DescripcionActividad</div>
+            <div class="form-group">
+                <label asp-for="DescripcionActividad" class="form-label">
+                    <i class="fas fa-align-left me-2"></i>Descripción
+                </label>
+                <input asp-for="DescripcionActividad" class="form-control" placeholder="Descripción breve de la actividad" />
+                <span asp-validation-for="DescripcionActividad" class="text-danger"></span>
             </div>
-        </div>
 
-        <div class="action-buttons">
-            <a asp-action="Edit" asp-route-id="@Model.IdActividad" class="btn btn-edit">
-                <i class="fas fa-edit me-2"></i>Editar
-            </a>
-            <a asp-action="Index" class="btn btn-back">
-                <i class="fas fa-arrow-left me-2"></i>Volver al Listado
-            </a>
-        </div>
+            <div class="action-buttons">
+                <button type="submit" class="btn btn-save">
+                    <i class="fas fa-save me-2"></i>Guardar Cambios
+                </button>
+                <a asp-action="Index" class="btn btn-back">
+                    <i class="fas fa-arrow-left me-2"></i>Cancelar
+                </a>
+            </div>
+        </form>
     </div>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

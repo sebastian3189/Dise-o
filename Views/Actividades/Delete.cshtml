@@ -6,9 +6,11 @@
 
 <!-- Agrega Montserrat desde Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- Agrega Font Awesome para íconos -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
-    /* Estilos generales con Montserrat */
+    /* Estilos generales */
     body {
         font-family: 'Montserrat', sans-serif;
         background: linear-gradient(rgba(38, 141, 215, 0.1), rgba(38, 141, 215, 0.1)), url('https://images.unsplash.com/photo-1571902943202-507ec2618e8f?ixlib=rb-4.0.3');
@@ -44,29 +46,38 @@
         font-weight: 600;
     }
 
-    .btn {
+    .btn-custom {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         font-family: 'Montserrat', sans-serif;
-        font-weight: 500;
+        font-weight: 600;
+        border-radius: 50px;
+        padding: 10px 30px;
+        font-size: 16px;
+        text-decoration: none;
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
     }
 
-    .btn-danger {
+    .btn-danger-custom {
         background-color: #dc3545;
+        color: #fff;
         border-color: #dc3545;
-        padding: 8px 25px;
     }
 
-        .btn-danger:hover {
+        .btn-danger-custom:hover {
             background-color: #c82333;
             border-color: #bd2130;
         }
 
-    .btn-secondary {
-        color: #268DD7;
-        border-color: #268DD7;
+    .btn-secondary-custom {
         background-color: transparent;
+        color: #268DD7;
+        border: 2px solid #268DD7;
     }
 
-        .btn-secondary:hover {
+        .btn-secondary-custom:hover {
             background-color: rgba(38, 141, 215, 0.1);
         }
 
@@ -107,11 +118,10 @@
 </style>
 
 <div class="form-container">
-    <h2 class="form-title">GIMNASIO ITM</h2>
-    <h3>ELIMINAR ACTIVIDAD</h3>
+    <h2 class="form-title">⚠️ CONFIRMAR ELIMINACIÓN</h2>
 
     <div class="confirmation-message">
-        ¿Estás seguro que deseas eliminar esta actividad? Esta acción no se puede deshacer.
+        ¿Seguro que quieres eliminar esta actividad? No podrás recuperarla.
     </div>
 
     <div class="details-list">
@@ -129,8 +139,8 @@
     <form asp-action="Delete">
         <input type="hidden" asp-for="IdActividad" />
         <div class="button-group">
-            <button type="submit" class="btn btn-danger">Eliminar</button>
-            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+            <button type="submit" class="btn-custom btn-danger-custom">Confirmar Eliminación</button>
+            <a asp-action="Index" class="btn-custom btn-secondary-custom">Cancelar</a>
         </div>
     </form>
 </div>
