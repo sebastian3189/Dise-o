@@ -75,7 +75,7 @@
             border-color: #28a745;
         }
 
-        .btn-warning {
+        .btn-edit {
             background-color: #6BB9F0;
             border-color: #6BB9F0;
             color: #212529;
@@ -234,7 +234,7 @@
                             <td>@item.IdActividadNavigation?.NombreActividad</td>
                             <td>@item.IdEspacioNavigation?.NombreEspacio</td>
                             <td class="text-end action-buttons">
-                                <a asp-action="Edit" asp-route-id="@item.IdHorario" class="btn btn-sm btn-warning" title="Editar">
+                                <a asp-action="Edit" asp-route-id="@item.IdHorario" class="btn btn-sm btn-edit" title="Editar">
                                     <i class="fas fa-edit"></i>
                                 </a>
                                 <a asp-action="Delete" asp-route-id="@item.IdHorario" class="btn btn-sm btn-danger" title="Eliminar">
