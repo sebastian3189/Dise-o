@@ -244,10 +244,9 @@
                                     <i class="fas fa-trash-alt"></i>
                                 </a>
                             @*     Botón para confirmar asistencia *@
-                                <button type="button" class="btn btn-sm btn-success" title="Confirmar asistencia" data-bs-toggle="modal" data-bs-target="#modalConfirmarAsistencia">
+                                <a id="idHorario" name="idHorario" class="btn btn-sm btn-success" title="Confirmar asistencia" data-bs-toggle="modal" data-bs-target="#modalConfirmarAsistencia" data-id="@item.IdHorario">
                                     <i class="fas fa-check"></i> Asistir
-                                </button>
-                                
+                                </a>
                             </td>
                         </tr>
                     }
@@ -263,11 +262,19 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                         </div>
                         <div class="modal-body">
-                            <p>Selecciona el usuario para confirmar su asistencia</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-success">Confirmar asistencia</button>
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                            <form asp-action="ConfirmarAsistencia" method="post">
+                                <!-- Campo oculto para el IdHorario -->
+                                <input type="hidden" id="idHorario" name="idHorario" />
+
+                                <!-- Dropdown para seleccionar un usuario -->
+                                <label for="IdUsuario" class="form-label">Selecciona un usuario</label>
+                                <select id="IdUsuario" name="IdUsuario" class="form-select" asp-items="ViewBag.ListaUsuarios">
+                                    <option value="">Seleccione un usuario</option>
+                                </select>
+
+                                <button type="submit" class="btn btn-success mt-3">Confirmar asistencia</button>
+                                <button type="button" class="btn btn-danger mt-3" data-bs-dismiss="modal">Cancelar</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -294,6 +301,18 @@
 
                 document.getElementById('FechaInicio').value = formatDateForInput('@ViewData["FechaInicio"]');
                 document.getElementById('FechaFin').value = formatDateForInput('@ViewData["FechaFin"]');
+            });
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Abre el modal y pasa el IdHorario al input hidden
+                var modal = document.getElementById('modalConfirmarAsistencia');
+                modal.addEventListener('show.bs.modal', function (event) {
+                    var button = event.relatedTarget; // Botón que abrió el modal
+                    var idHorario = button.getAttribute('data-id'); // Extrae el id del horario
+                    var input = modal.querySelector('#idHorario'); // Encuentra el campo oculto
+                    input.value = idHorario; // Asigna el valor al campo oculto
+                });
             });
         </script>
     }

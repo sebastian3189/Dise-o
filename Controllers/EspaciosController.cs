@@ -148,6 +148,17 @@ namespace GYM_ITM.Controllers
             if (espacio != null)
             {
                 _context.Espacios.Remove(espacio);
+                //foreach (Horario horario in _context.Horarios)
+                //{
+                //    if (horario.IdEspacio == id)
+                //    {
+                //        _context.Remove(horario);
+                //    }
+                //    else
+                //    {
+                //        continue;
+                //    }
+                //}
             }
 
             await _context.SaveChangesAsync();

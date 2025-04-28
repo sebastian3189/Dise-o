@@ -2,7 +2,7 @@
 {
     public interface INotifier
     {
-        Task<string> NotificarSuscriptores();
+        Task<string> NotificarSuscriptores(int idHorario);
 
         void AñadirSuscriptor(Usuario suscriptor);
 
