@@ -1,30 +1,222 @@
 ﻿@model GYM_ITM.Models.Actividades
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalles de Actividad";
 }
 
-<h1>Details</h1>
+<!-- Agrega Montserrat desde Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- Agrega Font Awesome para íconos -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<div>
-    <h4>Actividade</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NombreActividad)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NombreActividad)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DescripcionActividad)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DescripcionActividad)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.IdActividad">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<style>
+    /* Estilos generales */
+    body {
+        font-family: 'Montserrat', sans-serif;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 0;
+    }
+
+    .navbar {
+        background-color: #268DD7;
+        padding: 15px 30px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .navbar-brand {
+        color: white !important;
+        font-weight: 700;
+        font-size: 1.5rem;
+    }
+
+    .nav-link {
+        color: rgba(255,255,255,0.8) !important;
+        margin: 0 10px;
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+
+        .nav-link:hover {
+            color: white !important;
+            transform: translateY(-2px);
+        }
+
+    .details-container {
+        background-color: white;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        max-width: 800px;
+        margin: 40px auto;
+        border-top: 5px solid #268DD7;
+    }
+
+    .details-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .details-title {
+        color: #268DD7;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .details-card {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 25px;
+        margin-bottom: 30px;
+    }
+
+    .detail-row {
+        display: flex;
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+        .detail-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+    .detail-label {
+        font-weight: 600;
+        color: #268DD7;
+        width: 200px;
+        font-size: 1rem;
+    }
+
+    .detail-value {
+        flex: 1;
+        color: #495057;
+        font-weight: 500;
+    }
+
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 30px;
+    }
+
+    .btn {
+        font-weight: 600;
+        padding: 10px 25px;
+        border-radius: 30px;
+        transition: all 0.3s;
+    }
+
+    .btn-edit {
+        background-color: #268DD7;
+        color: white;
+        border: none;
+    }
+
+        .btn-edit:hover {
+            background-color: #1E7BC4;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(38, 141, 215, 0.3);
+        }
+
+    .btn-back {
+        background-color: white;
+        color: #268DD7;
+        border: 2px solid #268DD7;
+    }
+
+        .btn-back:hover {
+            background-color: rgba(38, 141, 215, 0.1);
+            transform: translateY(-2px);
+        }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .detail-row {
+            flex-direction: column;
+        }
+
+        .detail-label {
+            width: 100%;
+            margin-bottom: 8px;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn {
+            width: 100%;
+        }
+    }
+</style>
+
+<!-- Barra de navegación -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">GYM_ITM</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Privacy</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Usuarios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Espacios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" asp-controller="Actividades" asp-action="Index">Actividades</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Horarios</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Contenido principal -->
+<div class="container">
+    <div class="details-container">
+        <div class="details-header">
+            <h1 class="details-title">GIMNASIO ITM</h1>
+            <h2>DETALLES DE ACTIVIDAD</h2>
+        </div>
+
+        <div class="details-card">
+            <div class="detail-row">
+                <div class="detail-label">
+                    <i class="fas fa-dumbbell me-2"></i>
+                    Nombre de Actividad:
+                </div>
+                <div class="detail-value">@Model.NombreActividad</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">
+                    <i class="fas fa-align-left me-2"></i>
+                    Descripción:
+                </div>
+                <div class="detail-value">@Model.DescripcionActividad</div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <a asp-action="Edit" asp-route-id="@Model.IdActividad" class="btn btn-edit">
+                <i class="fas fa-edit me-2"></i>Editar
+            </a>
+            <a asp-action="Index" class="btn btn-back">
+                <i class="fas fa-arrow-left me-2"></i>Volver al Listado
+            </a>
+        </div>
+    </div>
 </div>
