@@ -86,6 +86,7 @@ namespace GYM_ITM.Controllers
             {
                 return NotFound();
             }
+
             return View(actividade);
         }
 
