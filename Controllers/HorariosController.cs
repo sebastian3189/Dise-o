@@ -293,8 +293,11 @@ namespace GYM_ITM.Controllers
             var horario = await _context.Horarios.FindAsync(id);
             if (horario != null)
             {
+                await _context.Entry(horario).Collection(h => h.UsuariosConfirmados).LoadAsync();
+                horario.UsuariosConfirmados.Clear();
                 _context.Horarios.Remove(horario);
                 await _context.SaveChangesAsync();
+                Console.WriteLine(await NotificarSuscriptores(id));
             }
             return RedirectToAction(nameof(Index));
         }

@@ -27,7 +27,7 @@ namespace GYM_ITM.Controllers
             Usuario? usuario = await _context.Usuarios.FindAsync(id);
             if (usuario != null)
             {
-                return $"Hola, soy {usuario.Nombre} {usuario.Apellido}, ya me enteré del cambio de horario o lugar. Gracias.";
+                return $"Hola, soy {usuario.Nombre} {usuario.Apellido}, ya me enteré del cambio. Gracias.";
             } else
             {
                 return $"La persona con ID {id} no está registrado en nuestra base de datos, por ese motivo no tenemos datos para efectuar su notificación. Debe registrarse para recibir próximas notificaciones.";
@@ -200,10 +200,12 @@ namespace GYM_ITM.Controllers
             var usuario = await _context.Usuarios.FindAsync(id);
             if (usuario != null)
             {
+                await _context.Entry(usuario).Collection(u => u.HorariosConfirmados).LoadAsync();
+                usuario.HorariosConfirmados.Clear();
                 _context.Usuarios.Remove(usuario);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

@@ -147,21 +147,15 @@ namespace GYM_ITM.Controllers
             var espacio = await _context.Espacios.FindAsync(id);
             if (espacio != null)
             {
+                await _context.Entry(espacio).Collection(e => e.Horarios).LoadAsync();
+                foreach (Horario horario in espacio.Horarios)
+                {
+                    horario.IdEspacio = null;
+                }
                 _context.Espacios.Remove(espacio);
-                //foreach (Horario horario in _context.Horarios)
-                //{
-                //    if (horario.IdEspacio == id)
-                //    {
-                //        _context.Remove(horario);
-                //    }
-                //    else
-                //    {
-                //        continue;
-                //    }
-                //}
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
