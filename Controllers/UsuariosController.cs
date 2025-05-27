@@ -92,21 +92,36 @@ namespace GYM_ITM.Controllers
             return View();
         }
 
-        // POST: Usuarios/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("IdUsuario,Nombre,Apellido,Correo,Telefono")] Usuario usuario)
         {
+            // Validación: verificar si ya existe un usuario con el mismo correo
+            bool correoExiste = await _context.Usuarios
+                .AnyAsync(u => u.Correo == usuario.Correo);
+
+            if (correoExiste)
+            {
+                ModelState.AddModelError("Correo", "Ya existe un usuario registrado con este correo.");
+            }
+
+            // Validación: el teléfono solo debe contener números
+            if (!usuario.Telefono.All(char.IsDigit))
+            {
+                ModelState.AddModelError("Telefono", "El teléfono solo debe contener números.");
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(usuario);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             return View(usuario);
         }
+
+
 
         // GET: Usuarios/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -136,6 +151,15 @@ namespace GYM_ITM.Controllers
                 return NotFound();
             }
 
+            // Validar si ya existe otro usuario con el mismo correo
+            bool correoDuplicado = await _context.Usuarios
+                .AnyAsync(u => u.Correo == usuario.Correo && u.IdUsuario != usuario.IdUsuario);
+
+            if (correoDuplicado)
+            {
+                ModelState.AddModelError("Correo", "Ya existe otro usuario registrado con este correo.");
+            }
+
             if (ModelState.IsValid)
             {
                 try
@@ -156,8 +180,10 @@ namespace GYM_ITM.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             return View(usuario);
         }
+
 
         // GET: Usuarios/Delete/5
         public async Task<IActionResult> Delete(int? id)
