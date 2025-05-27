@@ -1,46 +1,185 @@
 ﻿@model GYM_ITM.Models.Horario
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Crear Horario";
 }
 
-<h1>Create</h1>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - GYM_ITM</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <style>
+        :root {
+            --color-primario: #268DD7;
+            --color-secundario: #1E7BB8;
+        }
 
-<h4>Horario</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="FechaInicio" class="control-label"></label>
-                <input asp-for="FechaInicio" class="form-control" />
-                <span asp-validation-for="FechaInicio" class="text-danger"></span>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(rgba(38, 141, 215, 0.1), rgba(38, 141, 215, 0.1)), url('https://images.unsplash.com/photo-1571902943202-507ec2618e8f?ixlib=rb-4.0.3');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .create-container {
+            max-width: 800px;
+            margin: 2rem auto;
+        }
+
+        .create-card {
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(38, 141, 215, 0.2);
+            border: none;
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.95);
+            overflow: hidden;
+        }
+
+        .card-header {
+            background-color: var(--color-primario);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            border-bottom: none;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            gap: 15px;
+        }
+
+        .btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--color-primario);
+            border-color: var(--color-primario);
+        }
+
+            .btn-primary:hover {
+                background-color: #268DD7; /* Cambiamos a azul en hover */
+                border-color: #268DD7;
+                transform: translateY(-2px);
+            }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        @@media (max-width: 768px) {
+            .btn-container {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="create-container">
+        <div class="create-card">
+            <div class="card-header">
+                <h2 class="card-title"><i class="fas fa-calendar-plus"></i> @ViewData["Title"]</h2>
             </div>
-            <div class="form-group">
-                <label asp-for="FechaFin" class="control-label"></label>
-                <input asp-for="FechaFin" class="form-control" />
-                <span asp-validation-for="FechaFin" class="text-danger"></span>
+            <div class="card-body">
+                @if (!string.IsNullOrEmpty(TempData["ErrorMessage"]?.ToString()))
+                {
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-circle"></i> @TempData["ErrorMessage"]
+                    </div>
+                }
+
+                <form method="post">
+                    <!-- Fecha de Inicio -->
+                    <div class="form-group">
+                        <label for="FechaInicio" class="form-label"><i class="far fa-clock me-2"></i>Fecha y Hora de Inicio</label>
+                        <input type="datetime-local" id="FechaInicio" name="FechaInicio" class="form-control" required />
+                        <span asp-validation-for="FechaInicio" class="text-danger"></span>
+                    </div>
+
+                    <!-- Fecha de Fin -->
+                    <div class="form-group">
+                        <label for="FechaFin" class="form-label"><i class="far fa-clock me-2"></i>Fecha y Hora de Fin</label>
+                        <input type="datetime-local" id="FechaFin" name="FechaFin" class="form-control" required />
+                        <span asp-validation-for="FechaFin" class="text-danger"></span>
+                    </div>
+
+                    <!-- Dropdown Actividad -->
+                    <div class="form-group">
+                        <label for="IdActividad" class="form-label"><i class="fas fa-dumbbell me-2"></i>Actividad</label>
+                        <select class="form-control" id="IdActividad" name="IdActividad" required>
+                            <option value="">Seleccione una actividad</option>
+                            @foreach (var actividad in ViewBag.IdActividad as SelectList)
+                            {
+                                <option value="@actividad.Value">@actividad.Text</option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Dropdown Espacio -->
+                    <div class="form-group">
+                        <label for="IdEspacio" class="form-label"><i class="fas fa-location-dot me-2"></i>Espacio</label>
+                        <select class="form-control" id="IdEspacio" name="IdEspacio" required>
+                            <option value="">Seleccione un espacio</option>
+                            @foreach (var espacio in ViewBag.IdEspacio as SelectList)
+                            {
+                                <option value="@espacio.Value">@espacio.Text</option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Botones -->
+                    <div class="btn-container">
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Volver al Listado
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Crear Horario
+                        </button>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="IdActividad" class="control-label"></label>
-                <select asp-for="IdActividad" class ="form-control" asp-items="ViewBag.IdActividad"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdEspacio" class="control-label"></label>
-                <select asp-for="IdEspacio" class ="form-control" asp-items="ViewBag.IdEspacio"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
+</body>
+</html>

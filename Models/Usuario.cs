@@ -23,5 +23,5 @@ public partial class Usuario
     [Required(ErrorMessage = "El telefono es obligatorio.")]
     public string? Telefono { get; set; }
 
-    public virtual ICollection<Horario> IdHorarios { get; set; } = new List<Horario>();
+    public virtual ICollection<Horario> HorariosConfirmados { get; set; } = new List<Horario>();
 }

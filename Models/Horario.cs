@@ -19,5 +19,5 @@ public partial class Horario
 
     public virtual Espacio? IdEspacioNavigation { get; set; }
 
-    public virtual ICollection<Usuario> IdUsuarios { get; set; } = new List<Usuario>();
+    public virtual ICollection<Usuario> UsuariosConfirmados { get; set; } = new List<Usuario>();
 }
