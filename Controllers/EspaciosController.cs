@@ -147,10 +147,18 @@ namespace GYM_ITM.Controllers
             var espacio = await _context.Espacios.FindAsync(id);
             if (espacio != null)
             {
+                await _context.Entry(espacio).Collection(e => e.Horarios).LoadAsync();
+                foreach (Horario horario in espacio.Horarios)
+                {
+                    horario.IdEspacio = null;
+                }
+
+                Console.WriteLine($"\nSeñor(a) entrenador(a), EL ESPACIO {espacio.NombreEspacio} ya no está disponible, por favor re asignar espacio.\n");
+
                 _context.Espacios.Remove(espacio);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

@@ -84,6 +84,7 @@
 
     .btn-edit {
         background-color: #6BB9F0;
+        border-color: #6BB9F0;
         color: #212529;
     }
 
@@ -162,7 +163,7 @@
                     <td>@Html.DisplayFor(modelItem => item.LimiteDisponibilidad)</td>
                     <td>
                         <div class="btn-group" role="group">
-                            <a asp-action="Edit" asp-route-id="@item.IdEspacio" class="btn btn-warning action-btn">
+                            <a asp-action="Edit" asp-route-id="@item.IdEspacio" class="btn btn-edit action-btn">
                                 <i class="fas fa-edit"></i> Editar
                             </a>
                             <a asp-action="Details" asp-route-id="@item.IdEspacio" class="btn btn-primary action-btn">

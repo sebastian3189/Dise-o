@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GYM_ITM.Models;
+using GYM_ITM.Models.Observer;
+using AspNetCoreGeneratedDocument;
 
 namespace GYM_ITM.Controllers
 {
@@ -86,6 +88,7 @@ namespace GYM_ITM.Controllers
             {
                 return NotFound();
             }
+
             return View(actividade);
         }
 
@@ -150,17 +153,25 @@ namespace GYM_ITM.Controllers
             var actividade = await _context.Actividades.FindAsync(id);
             if (actividade != null)
             {
-                _context.Actividades.Remove(actividade);
-                foreach (Horario horario in _context.Horarios) {
-                    if (horario.IdActividad == id) { 
+
+                List<Horario> horarios = await _context.Horarios.ToListAsync();
+                foreach (Horario horario in horarios) {
+                    if (horario.IdActividad == id) {
+                        await _context.Entry(horario).Collection(h => h.UsuariosConfirmados).LoadAsync();
+                        horario.UsuariosConfirmados.Clear();
                         _context.Remove(horario);
+
                     } else { 
                         continue;
                     }
                 }
+                Console.WriteLine($"\nSeñores usuarios, la actividad {actividade.NombreActividad} ya no está en la oferta del gimnasio de la universidad. Te recomendamos averiguar en otras dependencias como Bienestar Institucional o Extensión Académica para revisar otros posibles escenarios para practicar la actividad.\n");
+
+                _context.Actividades.Remove(actividade);
+                await _context.SaveChangesAsync();
+
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

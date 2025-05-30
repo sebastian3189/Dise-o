@@ -1,11 +1,15 @@
 using Microsoft.EntityFrameworkCore;
-using GYM_ITM.Models;  // Reemplaza con el espacio de nombres correcto
+using GYM_ITM.Models;
+using GYM_ITM.Controllers.Observer;  // Reemplaza con el espacio de nombres correcto
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+//Add Observer Interfaces and Services
+ObserverConfiguration.Configuration(builder.Services);
 
 builder.Services.AddDbContext<DbgymContext>(options => 
     options.UseSqlServer(   builder.Configuration.GetConnectionString("conexion")));

@@ -5,16 +5,73 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GYM_ITM.Models;
+using GYM_ITM.Models.Observer;
 
 namespace GYM_ITM.Controllers
 {
-    public class HorariosController : Controller
+    public class HorariosController : Controller, INotifier
     {
         private readonly DbgymContext _context;
+        private readonly ISuscriber _suscriber;
+        //private List<Usuario> suscriptores;
 
-        public HorariosController(DbgymContext context)
+        public HorariosController(DbgymContext context, ISuscriber suscriber)
         {
             _context = context;
+            _suscriber = suscriber;
+            //suscriptores = new List<Usuario>();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ConfirmarAsistencia(int idHorario, int idUsuario)
+        {
+            Horario? horario = await _context.Horarios.FindAsync(idHorario);
+            Usuario? usuario = await _context.Usuarios.FindAsync(idUsuario);
+
+            if (usuario != null && horario != null)
+            {
+                usuario.HorariosConfirmados.Add(horario);
+                horario.UsuariosConfirmados.Add(usuario);
+                await _context.SaveChangesAsync();
+                //suscriptores.Add(usuario);
+                return RedirectToAction("Index");
+            }
+            else {
+                return RedirectToAction("Index");
+            }
+        }
+
+        public async Task<string> NotificarSuscriptores(int idHorario)
+        {
+            string respuestaSuscriptores = "SUSCRIPTORES NOTIFICADOS\n\n";
+            List<Usuario> listaSuscriptores = await _context.Usuarios.Where(u => u.HorariosConfirmados.Any(h => h.IdHorario == idHorario)).Include(u => u.HorariosConfirmados).ToListAsync();
+
+            if (listaSuscriptores.Any())
+            {
+                foreach (Usuario suscriptor in listaSuscriptores)
+                {
+                    respuestaSuscriptores += $"{await _suscriber.NotificarUsuario(suscriptor.IdUsuario)}\n";
+                }
+                return respuestaSuscriptores;
+            }
+            else {
+                respuestaSuscriptores += "Ningún usuario confirmo su asistencia a este horario, por lo tanto, ningún usuario fue notificado.";
+                return respuestaSuscriptores;
+            }
+        }
+
+        //Siempre que un usuario confirma asistencia a un horario se añade como suscriptor al horario.
+        //Es decir, se añade a Lista 'suscriptores'.
+        public void AñadirSuscriptor(Usuario suscriptor)
+        {
+            //suscriptores.Add(suscriptor);
+        }
+
+        //Siempre que un usuario cancela asistencia a un horario se elimina como suscriptor del horario
+        //Es decir, se elimina de Lista 'suscriptores'.
+        public void ElimminarSuscriptor(Usuario suscriptor)
+        {
+            //suscriptores.Remove(suscriptor);
         }
 
         // GET: Horarios
@@ -53,6 +110,10 @@ namespace GYM_ITM.Controllers
             // Pasar las fechas de inicio y fin a la vista para mostrar los filtros seleccionados
             ViewData["FechaInicio"] = fechaInicio?.ToString("yyyy-MM-ddTHH:mm");
             ViewData["FechaFin"] = fechaFin?.ToString("yyyy-MM-ddTHH:mm");
+
+            //Pasar datos de Usuarios para modal de confirmar asistencia
+            var listaUsuarios = await _context.Usuarios.ToListAsync();
+            ViewBag.ListaUsuarios = new SelectList(listaUsuarios, "IdUsuario", "Nombre");
 
             return View(await horarios.ToListAsync());
         }
@@ -175,7 +236,9 @@ namespace GYM_ITM.Controllers
                 {
                     _context.Update(horario);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    ViewBag.RespuestasSuscriptores = await NotificarSuscriptores(id);
+                    Console.WriteLine(await NotificarSuscriptores(id));
+                    return RedirectToAction("Index");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -230,8 +293,11 @@ namespace GYM_ITM.Controllers
             var horario = await _context.Horarios.FindAsync(id);
             if (horario != null)
             {
+                await _context.Entry(horario).Collection(h => h.UsuariosConfirmados).LoadAsync();
+                horario.UsuariosConfirmados.Clear();
                 _context.Horarios.Remove(horario);
                 await _context.SaveChangesAsync();
+                Console.WriteLine(await NotificarSuscriptores(id));
             }
             return RedirectToAction(nameof(Index));
         }
@@ -241,5 +307,6 @@ namespace GYM_ITM.Controllers
         {
             return _context.Horarios.Any(e => e.IdHorario == id);
         }
+
     }
 }
