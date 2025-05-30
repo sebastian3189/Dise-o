@@ -152,6 +152,9 @@ namespace GYM_ITM.Controllers
                 {
                     horario.IdEspacio = null;
                 }
+
+                Console.WriteLine($"\nSeñor(a) entrenador(a), EL ESPACIO {espacio.NombreEspacio} ya no está disponible, por favor re asignar espacio.\n");
+
                 _context.Espacios.Remove(espacio);
                 await _context.SaveChangesAsync();
             }

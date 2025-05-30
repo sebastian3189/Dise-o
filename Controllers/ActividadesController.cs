@@ -160,13 +160,16 @@ namespace GYM_ITM.Controllers
                         await _context.Entry(horario).Collection(h => h.UsuariosConfirmados).LoadAsync();
                         horario.UsuariosConfirmados.Clear();
                         _context.Remove(horario);
+
                     } else { 
                         continue;
                     }
                 }
+                Console.WriteLine($"\nSeñores usuarios, la actividad {actividade.NombreActividad} ya no está en la oferta del gimnasio de la universidad. Te recomendamos averiguar en otras dependencias como Bienestar Institucional o Extensión Académica para revisar otros posibles escenarios para practicar la actividad.\n");
 
                 _context.Actividades.Remove(actividade);
                 await _context.SaveChangesAsync();
+
             }
 
             return RedirectToAction(nameof(Index));
